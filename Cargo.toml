@@ -1,0 +1,17 @@
+[package]
+name = "mqtt-simulator"
+version = "0.1.0"
+authors = ["Sebastian Puetz <me@sebpuetz.eu>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1.0"
+clap = "2.33"
+env_logger = "0.8"
+log = "0.4"
+rumqttc = "0.5"
+serde = { version = "1.0", features = ["derive"] }
+tokio = { version = "1.0", features = ["fs", "rt"] }
+serde_json = "1.0"

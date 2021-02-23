@@ -1,0 +1,55 @@
+[
+    {
+        "topic": "fake_str",
+        "data": {
+            "value": "hello world",
+            "encoding": "UTF16LE"
+        }
+    },
+    {
+        "topic": "stringint",
+        "data": {
+            "value": "2"
+        }
+    },
+    {
+        "topic": "stringfloat",
+        "data": {
+            "value": "2"
+        }
+    },
+    {
+        "topic": "stringbool",
+        "data": {
+            "value": "true"
+        }
+    },
+    {
+        "topic": "fake_uint",
+        "data": {
+            "value": 0,
+            "width": "32",
+            "endian": "LittleEndian"
+        }
+    },
+    {
+        "topic": "fake_int",
+        "data": {
+            "value": -10,
+            "width": "32",
+            "endian": "LittleEndian"
+        }
+    },
+    {
+        "topic": "fake_float",
+        "data": {
+            "value": 2.3,
+            "width": "32",
+            "endian": "BigEndian"
+        }
+    },
+    {
+        "topic": "fake_bool",
+        "data": false
+    }
+]
