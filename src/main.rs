@@ -49,7 +49,9 @@ async fn sender(
     loop {
         let vals = rx.borrow().clone();
         for val in vals {
-            let msg = Publish::new(val.topic(), QoS::AtLeastOnce, val.data().serialize());
+            let mut buf = Vec::new();
+            val.data().serialize(&mut buf)?;
+            let msg = Publish::new(val.topic(), QoS::AtLeastOnce, buf);
             sink.send(Request::Publish(msg))
                 .await
                 .expect("Eventloop rx seems to be dead.");
@@ -62,7 +64,7 @@ async fn eventloop_task(mut eventloop: EventLoop) -> Result<()> {
     loop {
         match eventloop.poll().await {
             Err(e) => {
-                log::error!("Lost connection to MQTT Broker {:?}, in 3s", e);
+                log::error!("Lost connection to MQTT Broker {:?}, retrying in 3s", e);
                 sleep(Duration::from_secs(3)).await;
             }
             Ok(p) => {
@@ -89,7 +91,7 @@ async fn main() -> Result<()> {
                 .default_value("1883"),
         )
         .arg(
-            Arg::with_name("client_id")
+            Arg::with_name("client-id")
                 .long("client-id")
                 .short("i")
                 .default_value("mqtt-simulator"),
@@ -107,7 +109,7 @@ async fn main() -> Result<()> {
     let host = matches.value_of("host").unwrap();
     let port = matches.value_of("port").unwrap().parse()?;
     let send_interval = matches.value_of("send-interval").unwrap().parse()?;
-    let client_id = matches.value_of("client_id").unwrap();
+    let client_id = matches.value_of("client-id").unwrap();
 
     env_logger::Builder::from_env(Env::default().default_filter_or("info")).init();
     log::info!(

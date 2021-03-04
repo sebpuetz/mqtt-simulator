@@ -3,9 +3,10 @@
 This is a small tool to simulate a MQTT publisher with data taken from a JSON file. The published
 data is continuously updated by monitoring changes to the data file.
 
-Data is currently restricted to bool, int, float and String with some customization, e.g. all native
-integer and float types are supported in any width and endianness, Strings can be published as UTF8,
-UTF16LE and UTF16BE.
+Data can be published in a few formats: bool, int, float and String with some customization, e.g. all
+native integer and float types are supported in any width and endianness, Strings can be published as
+UTF8, UTF16LE and UTF16BE. Arrays of those primitives can also be defined, the data points are simply
+concatenated. Finally, arbitrary JSON objects are supported.
 
 ## Usage
 
@@ -65,6 +66,26 @@ Set up data in `data.json`
     {
         "topic": "bool",
         "data": false
+    },
+    {
+        "topic": "json",
+        "data": {
+            "mapping": {
+                "nested": true,
+            },
+            "n_fields": 2
+        }
+    },
+    {
+        "topic": "array",
+        "data": [
+            {
+                "value": 1
+            },
+            {
+                "value": "heterogeneous"
+            }
+        ]
     }
 ]
 ~~~
@@ -199,6 +220,53 @@ Publish a UTF16BE String:
     "data": {
         "value": "hello world",
         "encoding": "UTF16BE"
+    }
+}
+~~~
+
+### Arrays
+
+Heterogeneous, possibly nested, arrays can be defined as arrays of `Value`s. The array is simply a container
+that does not influence the serialization of the contained values. There are no delimiters, size fields or
+anything else added, the payloads of the contained values are simply concatenated.
+
+**Examples**
+
+~~~JSON
+{
+    "topic": "array",
+    "data": [
+        {
+            "value": "some string"
+        },
+        {
+            "value": 12
+        },
+        [
+            {
+                "value": "it's nested!"
+            }
+        ]
+    ]
+}
+~~~
+
+### JSON
+
+To ensure structural integrity of JSON strings, JSON objects are supported via `serde_json`. Data is published
+based on the output of `serde_json::to_writer`.
+
+**Examples**
+
+~~~JSON
+{
+    "topic": "json_object",
+    "data": {
+        "mapping": {
+            "nested": true
+        },
+        "array": ["anything goes", 2, false],
+        "string": "value"
     }
 }
 ~~~

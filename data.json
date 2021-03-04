@@ -3,7 +3,7 @@
         "topic": "fake_str",
         "data": {
             "value": "hello world",
-            "encoding": "UTF16LE"
+            "encoding": "UTF8"
         }
     },
     {
@@ -36,8 +36,8 @@
         "topic": "fake_int",
         "data": {
             "value": -10,
-            "width": "32",
-            "endian": "LittleEndian"
+            "width": "64",
+            "endian": "BigEndian"
         }
     },
     {
@@ -51,5 +51,30 @@
     {
         "topic": "fake_bool",
         "data": false
+    },
+    {
+        "topic": "an array!",
+        "data": [
+            {
+                "value": "lol"
+            },
+            {
+                "value": -10
+            },
+            [
+                {
+                    "value": "nested"
+                }
+            ]
+        ]
+    },
+    {
+        "topic": "Some JSON in the mix",
+        "data": {
+            "nested": {
+                "works": true
+            },
+            "test": "works?"
+        }
     }
 ]
